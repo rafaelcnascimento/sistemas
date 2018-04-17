@@ -8,25 +8,21 @@ use DB;
 
 class MaterialController extends Controller
 {
-    public function index() 
-    {     
-        $materiais = DB::connection('san')->table('materials')->orderBy('descricao','ASC')->paginate(50);
-
-        skljfklf
+    public function index()
+    {
+        $materiais = Material::orderBy('descricao', 'ASC')->paginate(50);
 
         return view('layouts.listaMateriais', compact('materiais'));
     }
 
-    public function adicionarMaterial() 
-    {    
+    public function adicionarMaterial()
+    {
         return view('layouts.novoMaterial');
     }
 
-    public function store() 
-    {    
+    public function store()
+    {
         $material = new Material;
-                
-        $material->setConnection('san');
 
         $material->codigo = request('codigo');
         $material->descricao = request('descricao');
@@ -37,44 +33,42 @@ class MaterialController extends Controller
         return redirect('/material/lista');
     }
 
-    public function editarMaterial($id) 
-    {    
-        $material = DB::connection('san')->table('materials')->where('id', $id)->first();
-
+    public function editarMaterial(Material $material)
+    {
         return view('layouts.editarMaterial', compact('material'));
     }
 
-    public function update($id) 
-    {    
-        $material = DB::connection('san')->table('materials')->where('id', $id)
-                ->update([
-                    'codigo' => request('codigo'),
-                    'descricao' => request('descricao'),
-                    'quantidade' => request('quantidade')
-                ]);
+    public function update(Material $material)
+    {
+        $material->update([
+                'codigo' => request('codigo'),
+                'descricao' => request('descricao'),
+                'quantidade' => request('quantidade')
+        ]);
                 
         return redirect('/material/lista');
     }
 
-    public function delete($id) 
-    {   
-        DB::connection('san')->table('materials')->where('id', $id)->delete(); 
+    public function delete(Material $material)
+    {
+        $material->delete();
 
         return redirect('/material/lista');
     }
 
-    public function buscaMaterial(Request $request) 
-    {    
+    public function buscaMaterial(Request $request)
+    {
         $output="";
        
         $materiais = new Material;
 
-        $materiais = DB::connection('san')->table('materials')->where('descricao','LIKE','%'.$request->search."%")->get();
+        //$materiais = DB::table('materials')->where('descricao', 'LIKE', '%'.$request->search."%")->get();
+
+        $materiais = Material::where('descricao', 'LIKE', "%{$request->search}%")
+                        ->orWhere('codigo', 'LIKE', "%{$request->search}%")->get();
      
-        if($materiais)
-        {
-            foreach ($materiais as $material) 
-            {
+        if ($materiais) {
+            foreach ($materiais as $material) {
                 $output.='<tr>'.
                 '<td>'.$material->id.'</td>'.
                 '<td>'.$material->codigo.'</td>'.
@@ -84,7 +78,6 @@ class MaterialController extends Controller
                 '</tr>';
             }
             return Response($output);
-        } 
-       
-    } 
+        }
+    }
 }

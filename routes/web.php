@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth']], function ()
 
     Route::get('/material/novoMaterial', 'MaterialController@adicionarMaterial');
 
-    Route::get('/material/{id}', 'MaterialController@editarMaterial');
+    Route::get('/material/{material}', 'MaterialController@editarMaterial');
 
     Route::get('/material/busca', 'MaterialController@buscaMaterial');
 
@@ -51,9 +51,9 @@ Route::group(['middleware' => ['auth']], function ()
     // POST ROUTES
     Route::post('/material', 'MaterialController@store');
 
-    Route::post('/material/{id}', 'MaterialController@update');
+    Route::post('/material/{material}', 'MaterialController@update');
 
-    Route::post('/material/delete/{id}', 'MaterialController@delete');
+    Route::post('/material/delete/{material}', 'MaterialController@delete');
 
     Route::post('/item', 'ItemsController@store');
 

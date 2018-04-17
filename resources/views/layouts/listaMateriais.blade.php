@@ -2,7 +2,8 @@
 @section('content')
 <div class="container">
     <center>
-        <div class="form-group">
+        <div class="form-group" style="margin-right: 250px">
+            <label>Pesquise pelo código ou descrição: </label>
             <input type="text" class="form-controller" id="search" name="search" autofocus></input>
         </div>
         <table class="table table-striped">
