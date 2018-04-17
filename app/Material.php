@@ -8,10 +8,8 @@ class Material extends Model
 {
     protected $guarded = [];
 
-    //Teste
-
     public function pedidos()
     {
-        return $this->belongsToMany('App\Pedido');
+        return $this->belongsToMany('App\Pedido', 'san.material_pedido', 'material_id', 'pedido_id')->withPivot('quantidade', 'atentido');
     }
 }

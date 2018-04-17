@@ -23,7 +23,7 @@ Route::get('/teste', 'testeController@index');
 Auth::routes();
 //As rotas a seguir necessitam de login para serem acessadas
 Route::group(['middleware' => ['auth']], function () 
-{  
+{
     Route::get('/home', 'HomeController@index')->name('home');
     //ROTAS CORREIO
     Route::get('/correio', 'RemessasController@index');
@@ -39,13 +39,15 @@ Route::group(['middleware' => ['auth']], function ()
     Route::get('/item/remover/{item}', 'ItemsController@destroy');
 
     //ROTAS MATERIAL
-    Route::get('/material/lista', 'MaterialController@index');  
+    Route::get('/material/lista', 'MaterialController@index');
 
     Route::get('/material/novoMaterial', 'MaterialController@adicionarMaterial');
 
-    Route::get('/material/{id}', 'MaterialController@editarMaterial'); 
+    Route::get('/material/{id}', 'MaterialController@editarMaterial');
 
-    Route::get('/material/busca', 'MaterialController@buscaMaterial'); 
+    Route::get('/material/busca', 'MaterialController@buscaMaterial');
+
+    Route::get('/material', 'PedidoController@index');
     // POST ROUTES
     Route::post('/material', 'MaterialController@store');
 
@@ -63,8 +65,6 @@ Route::group(['middleware' => ['auth']], function ()
 
     Route::post('/correio/busca', 'RemessasController@busca');
 });
-
-
 
 
 
