@@ -12,6 +12,8 @@ class MaterialController extends Controller
     {     
         $materiais = DB::connection('san')->table('materials')->orderBy('descricao','ASC')->paginate(50);
 
+        skljfklf
+
         return view('layouts.listaMateriais', compact('materiais'));
     }
 
