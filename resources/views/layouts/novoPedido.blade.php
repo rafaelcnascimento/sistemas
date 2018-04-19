@@ -1,6 +1,9 @@
 @extends('layouts.base')
 @section('content')
 <div class="container">
+    <div class="movie-data">
+        <h3>Aqui</h3>
+    </div>  
     <center>
         <div class="form-group" style="margin-right: 250px">
             <label>Pesquise pelo código ou descrição: </label>
@@ -23,14 +26,16 @@
                         <td>{{$material->codigo}}</td>
                         <td>{{$material->descricao}}</td>
                         <td>{{$material->quantidade}}</td>
-                        <td><a class="btn btn-primary" href="/material/{{$material->id}}">Editar</a></td>
+                        <td><button type="button" class="btn btn-success" id="button" value="{{$material->id}}">Adicionar</button></td>
                     </tr>    
                 @endforeach   
             </tbody>
         </table>
-        {{ $materiais->links() }}
+        {{ $materiais->links() }} 
+        
+        
     </center>
-</div>
+ </div>
 @endsection
 @section('js')
 <script type="text/javascript">
@@ -47,6 +52,24 @@
             }
         });
     })
+
+    $(function() {
+        $(document).on("click", 'button[class^="btn btn-success"]',function(){
+            var value=$(this).attr("value");
+            $.ajax({
+                type: 'get',
+                url: '/carrinhoAjax',
+                data: {
+                    'item': value
+                },
+                success: function(data) {
+                    //var newDiv = $('<div"><h4><a>'+value+'</a></h4> </div>');
+
+                    $('.movie-data').append(data);
+                }
+            });
+        });
+    });
 </script>    
 <script type="text/javascript">
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });

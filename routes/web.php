@@ -48,6 +48,8 @@ Route::group(['middleware' => ['auth']], function ()
 
     Route::get('/pedidoAjax', 'PedidoController@buscaMaterial');
 
+    Route::get('/carrinhoAjax', 'PedidoController@carrinho');
+
     Route::get('/material/{material}', 'MaterialController@editarMaterial');
 
     Route::get('/material/busca', 'MaterialController@buscaMaterial');

@@ -26,16 +26,30 @@ class PedidoController extends Controller
         return view('layouts.novoPedido', compact('materiais'));
     }
 
+    public function carrinho(Request $request)
+    {
+        $output="";
+
+        $quantidade = 5;
+
+        $material = Material::find($request->item);
+
+        $output =   '<ul>
+                        <li>'.$material->codigo.'</li>
+                        <li>'.$quantidade.'</li>
+                    </ul>';
+
+        return Response($output);
+    }
+
     public function buscaMaterial(Request $request)
     {
         $output="";
        
         $materiais = new Material;
 
-        //$materiais = DB::table('materials')->where('descricao', 'LIKE', '%'.$request->search."%")->get();
-
         $materiais = Material::where('descricao', 'LIKE', "%{$request->search}%")
-                        ->orWhere('codigo', 'LIKE', "%{$request->search}%")->get();
+                    ->orWhere('codigo', 'LIKE', "%{$request->search}%")->get();
      
         if ($materiais) {
             foreach ($materiais as $material) {
@@ -44,7 +58,7 @@ class PedidoController extends Controller
                 '<td>'.$material->codigo.'</td>'.
                 '<td>'.$material->descricao.'</td>'.
                 '<td>'.$material->quantidade.'</td>'.
-                '<td>'.'<a class="btn btn-primary" href="/material/'.$material->id.'">Editar</a></td>'.
+                '<td>'.'<button type="button" class="btn btn-success" id="button" value="'.$material->id.'">Adicionar</button>'.
                 '</tr>';
             }
             return Response($output);
