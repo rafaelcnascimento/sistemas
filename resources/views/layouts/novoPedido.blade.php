@@ -38,7 +38,7 @@
         $value = $(this).val();
         $.ajax({
             type: 'get',
-            url: '/materialAjax',
+            url: '/pedidoAjax',
             data: {
                 'search': $value
             },

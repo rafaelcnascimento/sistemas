@@ -10,6 +10,6 @@ class Pedido extends Model
 
     public function materials()
     {
-        return $this->belongsToMany('App\Material', 'material_pedido', 'material_id', 'pedido_id')->withPivot('quantidade', 'atentido');
+        return $this->belongsToMany('App\Material', 'material_pedido', 'id_pedido','id_material')->withPivot('quantidade', 'atentido');
     }
 }

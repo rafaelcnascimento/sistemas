@@ -15,14 +15,11 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::get('/testeAjax', 'MaterialController@buscaMaterial');
-
 Route::get('/teste', 'testeController@index');
-
 
 Auth::routes();
 //As rotas a seguir necessitam de login para serem acessadas
-Route::group(['middleware' => ['auth']], function () 
+Route::group(['middleware' => ['auth']], function ()
 {
     Route::get('/home', 'HomeController@index')->name('home');
     //ROTAS CORREIO
@@ -34,14 +31,22 @@ Route::group(['middleware' => ['auth']], function ()
 
     Route::get('/correio/{remessa}', 'RemessasController@show');
 
-    Route::get('/trocarSenha', function () { return view('auth.senha'); });
+    Route::get('/trocarSenha', function () {
+        return view('auth.senha');
+    });
 
     Route::get('/item/remover/{item}', 'ItemsController@destroy');
 
     //ROTAS MATERIAL
     Route::get('/material/lista', 'MaterialController@index');
 
+    Route::get('/materialAjax', 'MaterialController@buscaMaterial');
+
     Route::get('/material/novoMaterial', 'MaterialController@adicionarMaterial');
+
+    Route::get('/material/novoPedido', 'PedidoController@novoPedido');
+
+    Route::get('/pedidoAjax', 'PedidoController@buscaMaterial');
 
     Route::get('/material/{material}', 'MaterialController@editarMaterial');
 
@@ -65,7 +70,3 @@ Route::group(['middleware' => ['auth']], function ()
 
     Route::post('/correio/busca', 'RemessasController@busca');
 });
-
-
-
-

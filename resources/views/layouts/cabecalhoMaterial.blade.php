@@ -3,7 +3,7 @@
     <li><a href="/material/lista">Lista de materiais</a></li>
     <li><a href="/material/novoMaterial">Incluir material</a></li>
     <li><a href="/remessa">Lista de pedidos</a></li>
-    <li><a href="/correio">Novo pedido</a></li>
+    <li><a href="/material/novoPedido">Novo pedido</a></li>
 </ul>
 <ul class="nav navbar-nav navbar-right" style="margin-right: 10px">   
     <li>
