@@ -21,7 +21,7 @@ class PedidoController extends Controller
 
     public function novoPedido()
     {
-        $materiais = Material::orderBy('descricao', 'ASC')->paginate(50);
+        $materiais = Material::orderBy('codigo', 'ASC')->paginate(50);
 
         return view('layouts.novoPedido', compact('materiais'));
     }
@@ -49,7 +49,7 @@ class PedidoController extends Controller
         $materiais = new Material;
 
         $materiais = Material::where('descricao', 'LIKE', "%{$request->search}%")
-                    ->orWhere('codigo', 'LIKE', "%{$request->search}%")->get();
+                    ->orWhere('codigo', 'LIKE', "%{$request->search}%")->orderBy('codigo', 'ASC')->get();
      
         if ($materiais) {
             foreach ($materiais as $material) {

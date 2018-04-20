@@ -20,8 +20,13 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function remessa() 
-    {    
-        return $this->hasMany('App\Remessa','user_id');
+    public function remessa()
+    {
+        return $this->hasMany('App\Remessa', 'user_id');
+    }
+
+    public function cidade()
+    {
+        return $this->belongsTo('App\cidade', 'cidade_id');
     }
 }

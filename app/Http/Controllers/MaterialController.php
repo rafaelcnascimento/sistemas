@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Material;
 use DB;
+use Auth;
 
 class MaterialController extends Controller
 {
     public function index()
     {
-        $materiais = Material::orderBy('descricao', 'ASC')->paginate(50);
+        $materiais = Material::where('cidade_id', Auth::user()->cidade_id)->orderBy('codigo', 'ASC')->paginate(50);
 
         return view('layouts.listaMateriais', compact('materiais'));
     }
@@ -27,7 +28,8 @@ class MaterialController extends Controller
         $material->codigo = request('codigo');
         $material->descricao = request('descricao');
         $material->quantidade = request('quantidade');
-            
+        $material->cidade_id = Auth::user()->cidade_id;
+        
         $material->save();
 
         return redirect('/material/lista');
@@ -62,10 +64,8 @@ class MaterialController extends Controller
        
         $materiais = new Material;
 
-        //$materiais = DB::table('materials')->where('descricao', 'LIKE', '%'.$request->search."%")->get();
-
         $materiais = Material::where('descricao', 'LIKE', "%{$request->search}%")
-                        ->orWhere('codigo', 'LIKE', "%{$request->search}%")->get();
+                        ->orWhere('codigo', 'LIKE', "%{$request->search}%")->orderBy('codigo', 'ASC')->get();
      
         if ($materiais) {
             foreach ($materiais as $material) {
