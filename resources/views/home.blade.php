@@ -10,7 +10,8 @@
           <h3>Qual sistema deseja acessar?</h3>
           </br>
           <a href="/correio" class="btn btn-primary" role="button">Sistema de Controle de Remessas</a>
-          <div class="btn-group">
+          <a href="/material" class="btn btn-success" role="button">Sistema de Controle de Materiais</a>
+          {{-- <div class="btn-group">
             <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Sistema de Controle de Materiais <span class="caret"></span>
             </button>
@@ -22,7 +23,7 @@
                 <li><a href="">Lajeado</a></li>
                 <li><a href="">Canoas</a></li>
             </ul>
-          </div>
+          </div> --}}
       </center>
     </div>
 @endsection

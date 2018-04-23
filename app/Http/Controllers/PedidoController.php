@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use \App\Pedido;
+use \App\Carrinho;
 use \App\Objeto;
 use \App\Material;
 use Carbon\Carbon;
@@ -21,24 +22,36 @@ class PedidoController extends Controller
 
     public function novoPedido()
     {
-        $materiais = Material::orderBy('codigo', 'ASC')->paginate(50);
+        $carrinho =  Carrinho::orderBy('id', 'desc')->first();
 
-        return view('layouts.novoPedido', compact('materiais'));
+        $id_carrinho = $carrinho->id_carrinho;
+
+        $id_carrinho++;
+        
+        $materiais = Material::where('cidade_id', Auth::user()->cidade_id)->orderBy('codigo', 'ASC')->paginate(50);
+
+        return view('layouts.novoPedido', compact('materiais', 'id_carrinho'));
     }
 
     public function carrinho(Request $request)
     {
         $output="";
 
-        $quantidade = 5;
+        $quantidade = $request->quantidade;
 
         $material = Material::find($request->item);
 
-        $output =   '<ul>
-                        <li>'.$material->codigo.'</li>
-                        <li>'.$quantidade.'</li>
-                    </ul>';
+        Carrinho::create([
+            'id_carrinho' => $request->id_carrinho,
+            'id_material' => $request->item,
+            'quantidade' => $request->quantidade
+        ]);
 
+        $output.='<tr>'.
+        '<td>'.$material->codigo.'</td>'.
+        '<td>'.$quantidade.'</td>'.
+        '</tr>';
+        
         return Response($output);
     }
 
@@ -48,8 +61,8 @@ class PedidoController extends Controller
        
         $materiais = new Material;
 
-        $materiais = Material::where('descricao', 'LIKE', "%{$request->search}%")
-                    ->orWhere('codigo', 'LIKE', "%{$request->search}%")->orderBy('codigo', 'ASC')->get();
+        $materiais = Material::where('descricao', 'LIKE', "%{$request->search}%")->where('cidade_id', Auth::user()->cidade_id)
+                                ->orWhere('codigo', 'LIKE', "%{$request->search}%")->where('cidade_id', Auth::user()->cidade_id)->orderBy('codigo', 'ASC')->get();
      
         if ($materiais) {
             foreach ($materiais as $material) {
@@ -58,7 +71,8 @@ class PedidoController extends Controller
                 '<td>'.$material->codigo.'</td>'.
                 '<td>'.$material->descricao.'</td>'.
                 '<td>'.$material->quantidade.'</td>'.
-                '<td>'.'<button type="button" class="btn btn-success" id="button" value="'.$material->id.'">Adicionar</button>'.
+                '<td><input type="text"  id="qtd'.$material->id.'" style="width: 50px"></td>'.
+                '<td><button type="button" class="btn btn-success" id="'.$material->id.'" value="'.$material->id.'">Adicionar</button></td>'.
                 '</tr>';
             }
             return Response($output);

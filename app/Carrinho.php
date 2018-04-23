@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Carrinho extends Model
 {
-    public $timestamp = false;
+    protected $guarded = [];
+    
+    public $timestamps = false;
 }

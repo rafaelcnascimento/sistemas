@@ -64,9 +64,9 @@ class MaterialController extends Controller
        
         $materiais = new Material;
 
-        $materiais = Material::where('descricao', 'LIKE', "%{$request->search}%")
-                        ->orWhere('codigo', 'LIKE', "%{$request->search}%")->orderBy('codigo', 'ASC')->get();
-     
+        $materiais = Material::where('descricao', 'LIKE', "%{$request->search}%")->where('cidade_id', Auth::user()->cidade_id)
+                        ->orWhere('codigo', 'LIKE', "%{$request->search}%")->where('cidade_id', Auth::user()->cidade_id)->orderBy('codigo', 'ASC')->get();
+
         if ($materiais) {
             foreach ($materiais as $material) {
                 $output.='<tr>'.
