@@ -27,6 +27,8 @@ class PedidoController extends Controller
         $id_carrinho = $carrinho->id_carrinho;
 
         $id_carrinho++;
+
+        session([ 'cart' => $id_carrinho ]);
         
         $materiais = Material::where('cidade_id', Auth::user()->cidade_id)->orderBy('codigo', 'ASC')->paginate(50);
 
@@ -47,9 +49,10 @@ class PedidoController extends Controller
             'quantidade' => $request->quantidade
         ]);
 
-        $output.='<tr>'.
+        $output.='<tr id="row'.$material->id.'">'.
         '<td>'.$material->codigo.'</td>'.
         '<td>'.$quantidade.'</td>'.
+        '<td><a><span class="glyphicon glyphicon-remove" onclick="myFunction('.$material->id.')" style="margin-left: 25px"></span></a></td>'.
         '</tr>';
         
         return Response($output);

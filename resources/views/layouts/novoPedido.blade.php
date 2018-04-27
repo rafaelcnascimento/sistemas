@@ -1,10 +1,11 @@
 @extends('layouts.base')
 @section('content')
 <div class="container-fluid">
+    <h1>{{Session::get('cart')}}</h1>
     <div class="row">
         <div class="col-sm-9">
             <div class="form-group" style="margin-right: 250px">
-                <label>Pesquise pelo código ou descrição: </label>
+                <label style="margin-left:40%">Pesquise pelo código ou descrição: </label>
                 <input type="text" class="form-controller" id="search" name="search" autofocus></input>
             </div>
             <table class="table table-striped">
@@ -15,7 +16,7 @@
                         <th>Descrição</th>
                         <th>Qtd. Atual</th>
                         <th>Qtd. Pedido</th>
-                        <th>Editar</th>
+                        <th>Adicionar</th>
                     </tr>
                 </thead>
                 <tbody class="resultado"> 
@@ -36,14 +37,17 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">Carrinho</div>
                     <div class="panel-body">
-                        <table class="table table-striped">
+                        <table id="teste" class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Código</th>
                                     <th>Qtd</th>
+                                    <th>Remover</th>
                                 </tr>
                             </thead>
                             <tbody class="cart"> 
+                                <tr>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -72,14 +76,25 @@
         });
     })
 
+    function myFunction(id) 
+    {
+          var row = document.getElementById("row"+id);
+          row.parentNode.removeChild(row);
+    }
+    
     $(function() {
         $(document).on("click", 'button[class^="btn btn-success"]',function(){
             var value=$(this).attr("value");
             var qtd = $('#qtd' + value).val();
-            var carrinho = {{$id_carrinho}};
+            var carrinho = {{Session::get('cart')}};
             
             if (qtd == '') {
                 alert("Informe a quantidade");
+                return false;
+            }
+
+            if (Number.isInteger(qtd)) {
+                alert("aaaaaaaaaaaa");
                 return false;
             }
             
@@ -97,6 +112,7 @@
             });
         });
     });
+   
 </script>    
 <script type="text/javascript">
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
