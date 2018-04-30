@@ -1,7 +1,20 @@
 @extends('layouts.base')
 @section('content')
+
+@if (strpos(Request::fullUrl() , '?') == false)
+    @php
+        $id_carrinho = Session::get('cart');
+    @endphp
+    @else
+        @php
+            $id_carrinho = Session::get('cart');
+            $id_carrinho--;
+            session([ 'cart' => $id_carrinho ]);
+        @endphp
+@endif
+
 <div class="container-fluid">
-    <h1>{{Session::get('cart')}}</h1>
+    <h1>{{Session::get('teste')}}</h1>
     <div class="row">
         <div class="col-sm-9">
             <div class="form-group" style="margin-right: 250px">
@@ -45,13 +58,35 @@
                                     <th>Remover</th>
                                 </tr>
                             </thead>
-                            <tbody class="cart"> 
-                                <tr>
-                                </tr>
+                            <tbody class="cart">
+                                @if (strpos(Request::fullUrl() , '?') == true)
+                                    @foreach ($carrinhos as $carrinho)
+                                        <tr id="row{{$carrinho->id_material}}">
+                                            <td>{{$carrinho->codigo}}</td>
+                                            <td>{{$carrinho->quantidade}}</td>
+                                            <td>
+                                               <div id="{{$carrinho->id_material}}" class="glyphicon glyphicon-remove" style="cursor:pointer; margin-left:25px;"></div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif    
                             </tbody>
                         </table>
                     </div>
                 </div>
+                <form method="POST" action="/pedido">
+                    {{ csrf_field() }}
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Observação</div>
+                            <div class="panel-body">
+                                <textarea rows="4" cols="56" name="observacao"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="float:right; margin-right: 330px">
+                          Adicionar pedido
+                    </button>
+                </form>
         </div>
     </div>    
     <center>
@@ -76,16 +111,31 @@
         });
     })
 
-    function myFunction(id) 
-    {
-          var row = document.getElementById("row"+id);
-          row.parentNode.removeChild(row);
-    }
+   $(".glyphicon").on("click", function () {
+        var id = $(this).attr('id');
+        var tr = $(this).closest('tr');
+        var carrinho = {{Session::get('cart')}};
+        
+
+        $.ajax({
+            type: 'get',
+            url: '/removeAjax',
+            data: {
+                'item': id,
+                'carrinho':carrinho,
+            },
+            success: function(data) {
+                tr.remove();
+            }
+        });
+        
+   });
     
     $(function() {
         $(document).on("click", 'button[class^="btn btn-success"]',function(){
             var value=$(this).attr("value");
             var qtd = $('#qtd' + value).val();
+            var cod = $(this).attr("codigo");
             var carrinho = {{Session::get('cart')}};
             
             if (qtd == '') {
@@ -104,7 +154,7 @@
                 data: {
                     'item': value,
                     'quantidade':qtd,
-                    'id_carrinho':carrinho
+                    'id_carrinho':carrinho,
                 },
                 success: function(data) {
                     $('.cart').append(data);

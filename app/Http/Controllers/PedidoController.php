@@ -22,9 +22,11 @@ class PedidoController extends Controller
 
     public function novoPedido()
     {
-        $carrinho =  Carrinho::orderBy('id', 'desc')->first();
+        $cart =  Carrinho::orderBy('id', 'desc')->first();
 
-        $id_carrinho = $carrinho->id_carrinho;
+        $id_carrinho = $cart->id_carrinho;
+
+        $carrinhos = Carrinho::where('id_carrinho', $id_carrinho)->get();
 
         $id_carrinho++;
 
@@ -32,7 +34,13 @@ class PedidoController extends Controller
         
         $materiais = Material::where('cidade_id', Auth::user()->cidade_id)->orderBy('codigo', 'ASC')->paginate(50);
 
-        return view('layouts.novoPedido', compact('materiais', 'id_carrinho'));
+        return view('layouts.novoPedido', compact('materiais', 'id_carrinho', 'carrinhos'));
+    }
+
+    public function store()
+    {
+        $fugg = \Session::get('cart');
+        echo "$fugg";
     }
 
     public function carrinho(Request $request)
@@ -46,14 +54,23 @@ class PedidoController extends Controller
         Carrinho::create([
             'id_carrinho' => $request->id_carrinho,
             'id_material' => $request->item,
-            'quantidade' => $request->quantidade
+            'quantidade' => $request->quantidade,
+            'codigo' => $material->codigo
         ]);
 
         $output.='<tr id="row'.$material->id.'">'.
         '<td>'.$material->codigo.'</td>'.
         '<td>'.$quantidade.'</td>'.
-        '<td><a><span class="glyphicon glyphicon-remove" onclick="myFunction('.$material->id.')" style="margin-left: 25px"></span></a></td>'.
-        '</tr>';
+        '<td><div id="'.$material->id.'" class="glyphicon glyphicon-remove" style="cursor:pointer; margin-left:25px;"></div></td>';
+        
+        return Response($output);
+    }
+
+    public function destroyCarrinho(Request $request)
+    {
+        $output="";
+       
+        Carrinho::where('id_material', $request->item)->where('id_carrinho', $request->carrinho)->delete();
         
         return Response($output);
     }

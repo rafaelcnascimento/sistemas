@@ -10,8 +10,8 @@ use Carbon\Carbon;
 
 class ItemsController extends Controller
 {
-    public function store() 
-    {    
+    public function store()
+    {
         $item = new \App\Item;
 
         /* Se a checkox não for marcada a variavel POST referente virá vazia(null)
@@ -21,7 +21,7 @@ class ItemsController extends Controller
         $SEDEX = (is_null(request('SEDEX'))) ? 0 : 1;
         
         if (!is_null(request('codigo_rastreio'))) {
-            Item::create ([
+            Item::create([
                 'codigo_rastreio' => request('codigo_rastreio'),
                 'remessa_id' => request('remessa_id'),
                 'AR' => $AR,
@@ -37,28 +37,27 @@ class ItemsController extends Controller
             'observacao' => request('observacao'),
         ]);
 
-        if (request('fixar') == 1) 
-        {
+        if (request('fixar') == 1) {
             session([
                 'AR' => $AR,
                 'MP' => $MP,
                 'SEDEX' => $SEDEX,
                 'fixo' => 1,
-           ]);
-        } 
-        else 
-        {
+            ]);
+        } else {
             $keys = array('AR','MP', 'SEDEX','fixo');
             session(array_fill_keys($keys, '0'));
         }
     
+        
+    
         return redirect()->back();
     }
     
-    public function destroy(Item $item) 
-    {    
+    public function destroy(Item $item)
+    {
         $item->delete();
         
-        return redirect()->back();   
+        return redirect()->back();
     }
 }

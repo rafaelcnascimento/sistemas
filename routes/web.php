@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,7 +34,7 @@ Route::group(['middleware' => ['auth']], function ()
         return view('auth.senha');
     });
 
-    Route::get('/item/remover/{item}', 'ItemsController@destroy');
+    Route::get('/item/remover/{item}', 'ItemsController@destroyCart');
 
     //ROTAS MATERIAL
     Route::get('/material/lista', 'MaterialController@index');
@@ -50,12 +49,16 @@ Route::group(['middleware' => ['auth']], function ()
 
     Route::get('/carrinhoAjax', 'PedidoController@carrinho');
 
+    Route::get('/removeAjax', 'PedidoController@destroyCarrinho');
+
     Route::get('/material/{material}', 'MaterialController@editarMaterial');
 
     Route::get('/material/busca', 'MaterialController@buscaMaterial');
 
     Route::get('/material', 'PedidoController@index');
     // POST ROUTES
+    Route::post('/pedido', 'PedidoController@store');
+
     Route::post('/material', 'MaterialController@store');
 
     Route::post('/material/{material}', 'MaterialController@update');

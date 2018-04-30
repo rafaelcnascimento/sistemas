@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Remessa;
 use App\Material;
+use App\Carrinho;
 use App\Pedido;
 use DB;
 
@@ -12,14 +13,8 @@ class testeController extends Controller
 {
     public function index()
     {
-        $pedido = new Pedido;
+        Carrinho::where('id_material', 295)->where('id_carrinho', 1)->delete();
 
-        $pedido->setConnection('san');
-
-        $pedidos = $pedido->find(1)->get();
-
-        dd($pedidos);
-
-        return view('teste', compact('pedidos'));
+        echo "ok";
     }
 }
