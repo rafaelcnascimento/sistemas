@@ -3,14 +3,8 @@
 
 @if (strpos(Request::fullUrl() , '?') == false)
     @php
-        $id_carrinho = Session::get('cart');
+        Session::forget('cart');
     @endphp
-    @else
-        @php
-            $id_carrinho = Session::get('cart');
-            $id_carrinho--;
-            session([ 'cart' => $id_carrinho ]);
-        @endphp
 @endif
 
 <div class="container-fluid">
@@ -58,17 +52,17 @@
                                 </tr>
                             </thead>
                             <tbody class="cart">
-                                @if (strpos(Request::fullUrl() , '?') == true)
-                                    @foreach ($carrinhos as $carrinho)
-                                        <tr id="row{{$carrinho->id_material}}">
-                                            <td>{{$carrinho->codigo}}</td>
-                                            <td>{{$carrinho->quantidade}}</td>
+                                @if(!is_null(Session('cart')))
+                                    @foreach (Session('cart') as $key => $carrinho)
+                                        <tr>
+                                            <td>{{$carrinho['codigo']}}</td>
+                                            <td>{{$carrinho['quantidade']}}</td>
                                             <td>
-                                               <div id="{{$carrinho->id_material}}" class="glyphicon glyphicon-remove" style="cursor:pointer; margin-left:25px;"></div>
+                                                <div id={{$carrinho['material']}} class="glyphicon glyphicon-remove" style="cursor:pointer; margin-left:25px;"></div>
                                             </td>
                                         </tr>
                                     @endforeach
-                                @endif    
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -96,6 +90,7 @@
 
 @section('js')
 <script type="text/javascript">
+    //Busca
     $('#search').on('keyup', function() {
         $value = $(this).val();
         $.ajax({
@@ -109,18 +104,16 @@
             }
         });
     })
-
+    //Remove
    $(".cart").on("click", ".glyphicon", function () {
         var id = $(this).attr('id');
         var tr = $(this).closest('tr');
-        var carrinho = {{Session::get('cart')}};
         
         $.ajax({
             type: 'get',
             url: '/removeAjax',
             data: {
                 'item': id,
-                'carrinho':carrinho,
             },
             success: function(data) {
                 tr.remove();
@@ -128,11 +121,11 @@
         });
         
    });
+        //Adiciona
         $(document).on('click', '.btn-success',function(){
             var value=$(this).attr("value");
             var qtd = $('#qtd' + value).val();
             var cod = $(this).attr("codigo");
-            var carrinho = {{Session::get('cart')}};
             
             if (qtd == '') {
                 alert("Informe a quantidade");
@@ -140,7 +133,7 @@
             }
 
             if (Number.isInteger(qtd)) {
-                alert("aaaaaaaaaaaa");
+                alert("Use apenas Numeros");
                 return false;
             }
             
@@ -149,8 +142,7 @@
                 url: '/carrinhoAjax',
                 data: {
                     'item': value,
-                    'quantidade':qtd,
-                    'id_carrinho':carrinho
+                    'quantidade':qtd
                 },
                 success: function(data) {
                     $('.cart').append(data);

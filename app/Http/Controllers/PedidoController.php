@@ -9,6 +9,7 @@ use \App\Carrinho;
 use \App\Objeto;
 use \App\Material;
 use Carbon\Carbon;
+use Session;
 use DB;
 
 class PedidoController extends Controller
@@ -22,19 +23,9 @@ class PedidoController extends Controller
 
     public function novoPedido()
     {
-        $cart =  Carrinho::orderBy('id', 'desc')->first();
-
-        $id_carrinho = $cart->id_carrinho;
-
-        $carrinhos = Carrinho::where('id_carrinho', $id_carrinho)->get();
-
-        $id_carrinho++;
-
-        session([ 'cart' => $id_carrinho ]);
-        
         $materiais = Material::where('cidade_id', Auth::user()->cidade_id)->orderBy('codigo', 'ASC')->paginate(50);
 
-        return view('layouts.novoPedido', compact('materiais', 'id_carrinho', 'carrinhos'));
+        return view('layouts.novoPedido', compact('materiais'));
     }
 
     public function store()
@@ -51,12 +42,13 @@ class PedidoController extends Controller
 
         $material = Material::find($request->item);
 
-        Carrinho::create([
-            'id_carrinho' => $request->id_carrinho,
-            'id_material' => $request->item,
-            'quantidade' => $request->quantidade,
-            'codigo' => $material->codigo
-        ]);
+        $carrinho = array(
+            'material' => $material->id,
+            'codigo' => $material->codigo,
+            'quantidade' => $quantidade
+        );
+
+        Session::push('cart', $carrinho);
 
         $output.='<tr id="row'.$material->id.'">'.
         '<td>'.$material->codigo.'</td>'.
@@ -69,9 +61,19 @@ class PedidoController extends Controller
     public function destroyCarrinho(Request $request)
     {
         $output="";
+
+        $delete =  $request->item;
        
-        Carrinho::where('id_material', $request->item)->where('id_carrinho', $request->carrinho)->delete();
-        
+        foreach (Session('cart') as $key => $val)
+        {
+            if ($val['material'] == $delete)
+            {
+                $cart = Session::get('cart');
+                unset($cart[$key]);
+                Session::put('cart', $cart);
+            }
+        }
+
         return Response($output);
     }
 
