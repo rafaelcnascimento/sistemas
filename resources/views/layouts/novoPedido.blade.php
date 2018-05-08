@@ -14,7 +14,6 @@
 @endif
 
 <div class="container-fluid">
-    <h1>{{Session::get('teste')}}</h1>
     <div class="row">
         <div class="col-sm-9">
             <div class="form-group" style="margin-right: 250px">
@@ -111,12 +110,11 @@
         });
     })
 
-   $(".glyphicon").on("click", function () {
+   $(".cart").on("click", ".glyphicon", function () {
         var id = $(this).attr('id');
         var tr = $(this).closest('tr');
         var carrinho = {{Session::get('cart')}};
         
-
         $.ajax({
             type: 'get',
             url: '/removeAjax',
@@ -130,9 +128,7 @@
         });
         
    });
-    
-    $(function() {
-        $(document).on("click", 'button[class^="btn btn-success"]',function(){
+        $(document).on('click', '.btn-success',function(){
             var value=$(this).attr("value");
             var qtd = $('#qtd' + value).val();
             var cod = $(this).attr("codigo");
@@ -154,16 +150,15 @@
                 data: {
                     'item': value,
                     'quantidade':qtd,
-                    'id_carrinho':carrinho,
+                    'id_carrinho':carrinho
                 },
                 success: function(data) {
                     $('.cart').append(data);
                 }
             });
         });
-    });
-   
 </script>    
+
 <script type="text/javascript">
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 </script>
