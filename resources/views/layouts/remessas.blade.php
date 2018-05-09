@@ -48,7 +48,7 @@
                         @endforeach    
                     </tbody>
                 </table>
-                @if (Auth::user()->sigla == $remessa->criador->sigla || Auth::user()->sigla == 'adm')
+                @if (Auth::user()->sigla == $remessa->criador->sigla || Auth::user()->sigla == 'dvv')
                     <form method="POST" class="form-horizontal" action="/remessa/delete/{{$remessa->id}}">
                         {{ csrf_field() }}
                         <div class="btn-group">

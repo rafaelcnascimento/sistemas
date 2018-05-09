@@ -73,5 +73,7 @@ Route::group(['middleware' => ['auth']], function ()
 
     Route::post('/remessa/delete/{remessa}', 'RemessasController@delete');
 
+    Route::post('/pedido/delete/{pedido}', 'PedidoController@delete');
+
     Route::post('/correio/busca', 'RemessasController@busca');
 });

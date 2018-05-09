@@ -9,6 +9,7 @@ use \App\Carrinho;
 use \App\Objeto;
 use \App\Material;
 use Carbon\Carbon;
+use \App\Situation;
 use Session;
 use DB;
 
@@ -16,9 +17,9 @@ class PedidoController extends Controller
 {
     public function index()
     {
-        $pedido = Pedido::find(1);
+        $pedidos = Pedido::orderBy('id', 'DSC')->paginate(10);
 
-        return view('layouts.pedidos', compact('pedido'));
+        return view('layouts.pedidos', compact('pedidos'));
     }
 
     public function novoPedido()
@@ -30,8 +31,30 @@ class PedidoController extends Controller
 
     public function store()
     {
-        $fugg = \Session::get('cart');
-        echo "$fugg";
+        $novo_pedido = Pedido::create([
+            'user_id' => Auth::user()->id,
+            'cidade_id' => Auth::user()->cidade_id,
+            'observacao' => request('observacao')
+        ]);
+
+        $items = Session::get('cart');
+        
+        foreach ($items as $item) 
+        {
+            $novo_pedido->materials()->attach($novo_pedido->id, ['id_material' => $item['material'], 'quantidade' => $item['quantidade'], 'atentido' => 0]);
+        }
+
+        Session::forget('cart');
+
+        return redirect('/material');
+
+    }
+
+    public function delete(Pedido $pedido) 
+    {    
+        $pedido->delete();
+
+        return redirect('/material');
     }
 
     public function carrinho(Request $request)

@@ -132,7 +132,7 @@
                 return false;
             }
 
-            if (Number.isInteger(qtd)) {
+            if (isNaN(qtd)) {
                 alert("Use apenas Numeros");
                 return false;
             }
