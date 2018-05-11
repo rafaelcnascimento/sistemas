@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Registrar') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="/user">
+                    <form method="POST" action="{{ url('/register') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -38,6 +38,31 @@
                                 @endif
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label for="cidade_id" class="col-md-4 col-form-label text-md-right">{{ __('Cidade') }}</label>
+
+                            <div class="col-md-6">
+                                <select class="form-control{{ $errors->has('cidade_id') ? ' is-invalid' : '' }}" id="cidade_id"  name="cidade_id" required>
+                                    <option selected="" disabled="">Selecione</option>
+                                    <option value="2">Bento Gonçalves</option>
+                                    <option value="7">Canoas</option>
+                                    <option value="3">Caxias do Sul</option>
+                                    <option value="4">Lajeado</option>
+                                    <option value="5">Passo Fundo</option>
+                                    <option value="6">Santa Cruz do Sul</option>
+                                    <option value="1">Santo Ângelo</option>
+                                </select>
+
+                                @if ($errors->has('cidade_id'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('cidade_id') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                       
 
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail') }}</label>

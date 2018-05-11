@@ -22,6 +22,11 @@ class PedidoController extends Controller
         return view('layouts.pedidos', compact('pedidos'));
     }
 
+    public function show(Pedido $pedido)
+    {
+        return view('layouts.editarPedido', compact('pedido'));
+    }
+
     public function novoPedido()
     {
         $materiais = Material::where('cidade_id', Auth::user()->cidade_id)->orderBy('codigo', 'ASC')->paginate(50);

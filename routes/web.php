@@ -28,8 +28,6 @@ Route::group(['middleware' => ['auth']], function ()
 
     Route::get('/remessa', 'RemessasController@store');
 
-    Route::get('/correio/{remessa}', 'RemessasController@show');
-
     Route::get('/trocarSenha', function () {
         return view('auth.senha');
     });
@@ -56,7 +54,11 @@ Route::group(['middleware' => ['auth']], function ()
     Route::get('/material/busca', 'MaterialController@buscaMaterial');
 
     Route::get('/material', 'PedidoController@index');
+
+    Route::get('/material/pedido/{pedido}', 'PedidoController@show');
     // POST ROUTES
+    Route::post('/user', 'UserController@store');
+    
     Route::post('/pedido', 'PedidoController@store');
 
     Route::post('/material', 'MaterialController@store');
@@ -68,8 +70,6 @@ Route::group(['middleware' => ['auth']], function ()
     Route::post('/item', 'ItemsController@store');
 
     Route::post('/trocarSenha', 'UserController@trocarSenha');
-
-    Route::post('/user', 'UserController@store');
 
     Route::post('/remessa/delete/{remessa}', 'RemessasController@delete');
 
