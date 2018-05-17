@@ -48,15 +48,15 @@
                         @endforeach    
                     </tbody>
                 </table>
-                @if (Auth::user()->sigla == $remessa->criador->sigla || Auth::user()->sigla == 'dvv')
-                    <form method="POST" class="form-horizontal" action="/remessa/delete/{{$remessa->id}}">
-                        {{ csrf_field() }}
-                        <div class="btn-group">
-                            <a href="/correio/{{$remessa->id}}" class="btn btn-success">Editar</a>
-                            <button onclick="return confirm_alert(this)" class="btn btn-danger"> Remover </button>
-                        </div>
-                    </form>            
-                @endif
+                <form method="POST" class="form-horizontal" action="/remessa/delete/{{$remessa->id}}">
+                    {{ csrf_field() }}
+                    <div class="btn-group">
+                        <a href="/correio/{{$remessa->id}}" class="btn btn-success">Editar</a>
+                    @if (Auth::user()->sigla == $remessa->criador->sigla || Auth::user()->sigla == 'dvv')    
+                        <button onclick="return confirm_alert(this)" class="btn btn-danger"> Remover </button>
+                    @endif    
+                    </div>
+                </form>            
                 {{--Checa os itens sem registro--}}
                 @if ($remessa->sem_registro == 1)
                     <p><strong>1 Item está sem registro</strong></p>

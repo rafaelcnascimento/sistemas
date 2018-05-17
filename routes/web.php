@@ -69,11 +69,13 @@ Route::group(['middleware' => ['auth']], function ()
 
     Route::post('/item', 'ItemsController@store');
 
+    Route::post('/pedido/editar/{pedido}', 'PedidoController@update');
+
+    Route::post('/pedido/delete/{pedido}', 'PedidoController@delete');
+
     Route::post('/trocarSenha', 'UserController@trocarSenha');
 
     Route::post('/remessa/delete/{remessa}', 'RemessasController@delete');
-
-    Route::post('/pedido/delete/{pedido}', 'PedidoController@delete');
 
     Route::post('/correio/busca', 'RemessasController@busca');
 });

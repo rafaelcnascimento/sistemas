@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Pedido extends Model
 {
     protected $guarded = [];
+
+    protected $dates = ['recebido_at'];
 
     public function materials()
     {

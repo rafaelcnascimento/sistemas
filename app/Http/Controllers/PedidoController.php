@@ -46,13 +46,83 @@ class PedidoController extends Controller
         
         foreach ($items as $item) 
         {
-            $novo_pedido->materials()->attach($novo_pedido->id, ['id_material' => $item['material'], 'quantidade' => $item['quantidade'], 'atentido' => 0]);
+            $novo_pedido->materials()->attach($novo_pedido->id, ['id_material' => $item['material'], 'quantidade' => $item['quantidade'], 'atendido' => 0]);
         }
 
         Session::forget('cart');
 
         return redirect('/material');
+    }
 
+    public function update(Pedido $pedido)
+    {
+        $pedido->observacao = request('observacao');
+
+        if (is_null($pedido->recebido_por) && !is_null(request('recebido_por')))
+        {
+           $pedido->recebido_at = date('Y-m-d H:i:s');
+        }
+
+        $pedido->recebido_por = request('recebido_por');
+
+        $qtd = request('quantidade'); 
+
+        $ids = $pedido->materials()->allRelatedIds();
+
+        $i = 0;
+
+        foreach ($pedido->materials as $material) 
+        {
+            $material_novo = Material::find($material->pivot->id_material);
+
+            $quantidade_nova = $qtd[$i] - $material->pivot->atendido;
+
+            $material_novo->quantidade = $quantidade_nova + $material_novo->quantidade;
+
+            $material_novo->save();
+
+            $pedido->save();
+
+            $i++;
+
+        }
+
+        $i = 0;
+
+        foreach ($ids as $id)
+        {
+            $pedido->materials()->updateExistingPivot($id, ['atendido' => $qtd[$i]]);
+            $i++;
+        }
+
+        $flag_atendido = 1;
+
+        foreach ($pedido->materials as $material) 
+        {
+            if ($material->pivot->atendido < $material->pivot->quantidade) 
+            {
+               $flag_atendido = 0;
+            }
+        }
+
+        if ($flag_atendido == 1) 
+        {
+            $pedido->situation_id = 3;
+        } 
+        else 
+        {
+            $pedido->situation_id = 2;
+        }
+        
+        if (request('situation_id') != 0) 
+        {
+           $pedido->situation_id = request('situation_id');
+        }
+
+        $pedido->save();
+
+        return back();
+       
     }
 
     public function delete(Pedido $pedido) 

@@ -48,15 +48,15 @@
                         @endforeach
                    </tbody>
                </table>
-               @if (Auth::user()->sigla == $pedido->criador->sigla || Auth::user()->sigla == 'dvv')
-                   <form method="POST" class="form-horizontal" action="/pedido/delete/{{$pedido->id}}">
-                       {{ csrf_field() }}
-                       <div class="btn-group">
-                           <a href="/material/pedido/{{$pedido->id}}" class="btn btn-success">Editar</a>
-                           <button onclick="return confirm_alert(this)" class="btn btn-danger"> Remover </button>
-                       </div>
-                   </form>            
-               @endif
+                    <form method="POST" class="form-horizontal" action="/pedido/delete/{{$pedido->id}}">
+                        {{ csrf_field() }}
+                        <div class="btn-group">
+                             <a href="/material/pedido/{{$pedido->id}}" class="btn btn-success">Editar</a>
+                             @if (Auth::user()->sigla == $pedido->criador->sigla || Auth::user()->sigla == 'dvv')    
+                                <button onclick="return confirm_alert(this)" class="btn btn-danger"> Remover </button>
+                             @endif    
+                          </div>
+                      </form>                
                {{--Checa se tem alguma observação--}}
                @if($pedido->observacao)
                    <p><strong>OBS:</strong> {{$pedido->observacao}}</p>
@@ -68,9 +68,9 @@
        </center>
    </div>
    {{--Confirma a exclusão da pedido--}}
-   <script type="text/javascript">
-       function confirm_alert(node) {
-           return confirm("Para confirmar clique em 'OK' ");
-       }
-   </script>
+  <script type="text/javascript">
+         function confirm_alert(node) {
+             return confirm("Para confirmar clique em 'OK' ");
+         }
+     </script>
 @endsection

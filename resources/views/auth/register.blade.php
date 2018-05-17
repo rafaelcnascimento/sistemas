@@ -15,7 +15,7 @@
                             <label for="nome" class="col-md-4 col-form-label text-md-right">{{ __('Nome') }}</label>
 
                             <div class="col-md-6">
-                                <input id="nome" type="text" class="form-control{{ $errors->has('nome') ? ' is-invalid' : '' }}" name="nome" value="{{ old('nome') }}" required autofocus>
+                                <input id="nome" type="text" class="form-control{{ $errors->has('nome') ? ' is-invalid' : '' }}" name="nome" required autofocus>
 
                                 @if ($errors->has('nome'))
                                     <span class="invalid-feedback">
@@ -29,7 +29,7 @@
                             <label for="sigla" class="col-md-4 col-form-label text-md-right">{{ __('Sigla') }}</label>
 
                             <div class="col-md-6">
-                                <input id="sigla" type="text" class="form-control{{ $errors->has('sigla') ? ' is-invalid' : '' }}" name="sigla" value="{{ old('sigla') }}" required autofocus>
+                                <input id="sigla" type="text" class="form-control{{ $errors->has('sigla') ? ' is-invalid' : '' }}" name="sigla" required>
 
                                 @if ($errors->has('sigla'))
                                     <span class="invalid-feedback">
@@ -68,7 +68,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
+                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" required>
 
                                 @if ($errors->has('email'))
                                     <span class="invalid-feedback">
