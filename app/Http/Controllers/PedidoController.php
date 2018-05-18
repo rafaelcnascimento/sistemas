@@ -81,10 +81,7 @@ class PedidoController extends Controller
 
             $material_novo->save();
 
-            $pedido->save();
-
             $i++;
-
         }
 
         $i = 0;
@@ -94,6 +91,8 @@ class PedidoController extends Controller
             $pedido->materials()->updateExistingPivot($id, ['atendido' => $qtd[$i]]);
             $i++;
         }
+
+        $pedido = $pedido->fresh();
 
         $flag_atendido = 1;
 
@@ -105,13 +104,13 @@ class PedidoController extends Controller
             }
         }
 
-        if ($flag_atendido == 1) 
+        if ($flag_atendido == 0) 
         {
-            $pedido->situation_id = 3;
+            $pedido->situation_id = 2;
         } 
         else 
         {
-            $pedido->situation_id = 2;
+            $pedido->situation_id = 3;
         }
         
         if (request('situation_id') != 0) 
